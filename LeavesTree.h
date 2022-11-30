@@ -31,6 +31,8 @@
 
 
 
+//  ===| Data Structure |===
+
 template <typename key_type, typename data_type, typename secundary_type>
 struct Node{
     key_type          key;
@@ -59,6 +61,35 @@ struct Node{
         this->secundary_data = new secundary_type;
        *this->secundary_data = secundary_data;
     }
+
+
+    bool add(){}
+
+    bool remove(){}
+
+    //  Swap this Node with another
+    bool swap(Node<key_type, data_type, secundary_type> * b){
+        if(!this || !b)
+            return false; // Can't swap with NULL, it would be a move()
+        
+        Node<key_type, data_type, secundary_type> * swap = * this;
+        
+        //  Swap keys
+        swap->key   = b->key;
+        b->key      = this->key;
+
+        //  Swap pointers
+        * this = * b;
+        * b = swap;
+        
+        return true;
+    }
+
+    bool move(){}
+
+    Node<key_type, data_type, secundary_type> * search(){}
+
+    Node<key_type, data_type, secundary_type> pop(){}
 };
 
 
@@ -125,21 +156,4 @@ struct Node{
 //     }
 
 //     return false;
-// }
-
-
-// template <typename key_type, typename data_type, typename secundary_type>
-// bool swap(Node<key_type, data_type, secundary_type> * a, Node<key_type, data_type, secundary_type> * b){
-//     if(!a || !b)
-//         return false; // Can't swap with NULL, it would be a move()
-    
-//     Node<key_type, data_type, secundary_type> * swap = * a;
-    
-//     swap->key   = b->key;
-//     b->key      = a->key;
-
-//     * a = * b;
-//     * b = swap;
-    
-//     return true;
 // }
