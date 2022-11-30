@@ -87,29 +87,26 @@ struct Node{
 
     bool move(){}
 
-    Node<key_type, data_type, secundary_type> * search(){}
+    Node<key_type, data_type, secundary_type> * search(key_type key){
+        if(!this)
+            return NULL;
+        
+        Node<key_type, data_type, secundary_type> * nav = this;
+        
+        while(nav && key){
+            if(key & 0b1)
+                nav = nav->right;
+            else
+                nav = nav->left;
+            key = key >> 1;
+        }
+        
+        return nav;
+    }
 
     Node<key_type, data_type, secundary_type> pop(){}
 };
 
-
-
-// template <typename key_type, typename data_type, typename secundary_type>
-// Node<key_type, data_type, secundary_type> * search(Node<key_type, data_type, secundary_type> * root, key_type key){
-//     if(!root)
-//         return NULL;
-    
-//     Node<key_type, data_type, secundary_type> * nav = root;
-//     while(nav && key){
-//         if(key && 0b1)
-//             nav = nav->right;
-//         else
-//             nav = nav->left;
-//         key = key >> 1;
-//     }
-    
-//     return nav;
-// }
 
 
 // //  Create new Leaf beside another
