@@ -67,6 +67,9 @@ struct Node{
 
     //  Remove this Node
     bool remove(){
+        if(!this)   // I don't make sure if .remove() can be called from a null node, so...
+            return false;
+        
         if(this->left || this->right)
             return false; // You will not want to make his children orphans...
         
