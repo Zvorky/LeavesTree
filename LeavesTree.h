@@ -87,6 +87,7 @@ struct Node{
 
     bool move(){}
 
+    //  Returns the Node of the key
     Node<key_type, data_type, secundary_type> * search(key_type key){
         if(!this)
             return NULL;
@@ -104,7 +105,26 @@ struct Node{
         return nav;
     }
 
-    Node<key_type, data_type, secundary_type> pop(){}
+    //  Removes a Node and returns a copy of it
+    Node<key_type, data_type, secundary_type> pop(key_type key){
+        if(!this)
+            return NULL;
+        
+        Node<key_type, data_type, secundary_type> * nav = this;
+        
+        while(nav && key){
+            if(key & 0b1)
+                nav = nav->right;
+            else
+                nav = nav->left;
+            key = key >> 1;
+        }
+        
+        //  Not sure
+        Node<key_type, data_type, secundary_type> node = nav;
+        delete nav;
+        return node;
+    }
 };
 
 
