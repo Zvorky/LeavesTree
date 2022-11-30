@@ -65,12 +65,25 @@ struct Node{
 
     bool add(){}
 
-    bool remove(){}
+    //  Remove this Node
+    bool remove(){
+        if(this->left || this->right)
+            return false; // You will not want to make his children orphans...
+        
+        delete this->data;
+        delete this->secundary_data;
+        delete this;
+
+        return true;
+    }
 
     //  Search and Remove
     bool remove(key_type key){
         if(!this)
             return false;
+        
+        if(this->left || this->right)
+            return false; // You will not want to make his children orphans...
         
         Node<key_type, data_type, secundary_type> * nav = this;
         
@@ -82,6 +95,8 @@ struct Node{
             key = key >> 1;
         }
         
+        delete nav->data;
+        delete nav->secundary_data;
         delete nav;
         return true;
     }
