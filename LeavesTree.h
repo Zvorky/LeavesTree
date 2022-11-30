@@ -67,6 +67,25 @@ struct Node{
 
     bool remove(){}
 
+    //  Search and Remove
+    bool remove(key_type key){
+        if(!this)
+            return false;
+        
+        Node<key_type, data_type, secundary_type> * nav = this;
+        
+        while(nav && key){
+            if(key & 0b1)
+                nav = nav->right;
+            else
+                nav = nav->left;
+            key = key >> 1;
+        }
+        
+        delete nav;
+        return true;
+    }
+
     //  Swap this Node with another
     bool swap(Node<key_type, data_type, secundary_type> * b){
         if(!this || !b)
