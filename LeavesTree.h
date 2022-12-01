@@ -122,7 +122,7 @@ struct Node{
 
 
     //  Delete this Node: the wrong way to remove a Node !
-    bool delete(){  // Maybe the compiler will kill me because of this.
+    bool deleva(){
         if(!this)   // I don't make sure if .remove() can be called from a null node, so...
             return false;
         
@@ -156,7 +156,7 @@ struct Node{
             key = key >> 1;
         }
         
-        nav->delete();
+        nav->deleva;
         return true;
     }
 
@@ -218,7 +218,7 @@ struct Node{
         }
         
         Node<key_type, data_type, secondary_type> node = nav;
-        nav->delete();
+        nav->deleva;
         return node;
     }
 };
