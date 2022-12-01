@@ -33,7 +33,7 @@
 
 //  ===| Data Structure |===
 
-template <typename key_type, typename data_type, typename secundary_type>
+template <typename key_type, typename data_type, typename secundary_type = bool>
 struct Node{
     key_type          key;
     data_type       * data;
@@ -62,11 +62,67 @@ struct Node{
        *this->secundary_data = secundary_data;
     }
 
+    //  Leaf with existent data
+    Node(key_type key, data_type * data, secundary_type * secundary_data = NULL){
+        this->key   = key;
+        this->data  = data;
+        this->secundary_data = secundary_data;
+    }
 
-    bool add(){}
 
-    //  Remove this Node
-    bool remove(){
+    //  Add new data to right, by default.
+    void add(data_type * data, bool add_right = true, secundary_type * secundary_data = NULL){
+        if(!this){
+            this = new Node<key_type, data_type, secundary_type>(0, data);
+            return;
+        }
+
+        Node<key_type, data_type, secundary_type> * nav = this;
+
+        if(add_right){
+            //  Gets the right end leaf
+            while(nav->right)
+                nav = nav->right;
+            
+            //  Add new Leaf and copy older to left
+            nav->right = new Node<key_type, data_type, secundary_type>(nav->key << 1 + 1, data);
+            nav->left  = new Node<key_type, data_type, secundary_type>(nav->key << 1, nav->data);
+            
+        }else{
+            //  Gets the left end leaf
+            while(nav->left)
+                nav = nav->left;
+            
+            //  Add new Leaf and copy older to right
+            nav->left  = new Node<key_type, data_type, secundary_type>(nav->key << 1, data);
+            nav->right = new Node<key_type, data_type, secundary_type>(nav->key << 1 + 1, nav->data);
+        }
+
+        //  Add the secundary data
+        if(secundary_data)
+            nav->secundary_data = secundary_data;
+    }
+
+
+    //  Add function overload for non-allocated data
+    void add(data_type data, bool add_right = true, secundary_type secundary_data = NULL){
+        data_type      * d = new data_type;
+        secundary_type * s;
+
+        d = data;
+
+        if(secundary_data){
+            s = new secundary_type;
+            s = secundary_data;
+            this->add(d, add_right, s);
+            return;
+        }
+        this->add(d, add_right);
+    }
+
+
+    //  Delete this Node: the wrong way to remove a Node !
+    bool delete(){  // Maybe the compiler will kill me because of this.
         if(!this)   // I don't make sure if .remove() can be called from a null node, so...
             return false;
         
@@ -80,7 +136,9 @@ struct Node{
         return true;
     }
 
+
     //  Search and Remove
+    //  ! incomplete !      ~ needs to rearrange non-removed
     bool remove(key_type key){
         if(!this)
             return false;
@@ -98,11 +156,10 @@ struct Node{
             key = key >> 1;
         }
         
-        delete nav->data;
-        delete nav->secundary_data;
-        delete nav;
+        nav.delete();
         return true;
     }
+
 
     //  Swap this Node with another
     bool swap(Node<key_type, data_type, secundary_type> * b){
@@ -122,7 +179,9 @@ struct Node{
         return true;
     }
 
+
     bool move(){}
+
 
     //  Returns the Node of the key
     Node<key_type, data_type, secundary_type> * search(key_type key){
@@ -141,6 +200,7 @@ struct Node{
         
         return nav;
     }
+
 
     //  Removes a Node and returns a copy of it
     Node<key_type, data_type, secundary_type> pop(key_type key){
@@ -163,51 +223,3 @@ struct Node{
         return node;
     }
 };
-
-
-
-// //  Create new Leaf beside another
-// //  ! incomplete !
-// template <typename key_type, typename data_type, typename secundary_type>
-// bool add(Node<key_type, data_type, secundary_type> * node, data_type data, secundary_type node_data = NULL, bool add_at_right = true){
-//     if(!node){
-//         node = new Node<key_type, data_type, secundary_type>(0, data);
-//         return true;
-//     }
-
-//     key_type key = node->key << 1;
-//     Node<key_type, data_type, secundary_type> * nav = node;
-
-//     if(add_at_right){
-
-//         //  I think it gonna except, a Leaf dont have 'right'
-//         //  Make sure its at the
-//         while(nav->right){
-//             // key = key << 1 + 1;
-//             nav = nav->right;
-//         }
-        
-//         Node<key_type, data_type, secundary_type> * existent;
-//         * existent = * nav->right;
-//         nav = nav->right;
-
-//         //  A new Node get the position
-//         nav = new Node<key_type, data_type, secundary_type>(nav->right->key, node_data);
-
-//         //  Existent Leaf assumes its new position
-//         nav->left = existent;
-//         existent->key = existent->key << 1;
-
-//         //  Finally, the new Leaf
-//         nav->right = new Node<key_type, data_type, secundary_type>(nav->key << 1 + 1, data);
-        
-//         return true;
-//     // // It needs optimization
-//     // }else{
-//     //     while(nav->left){
-//     //         nav = nav->left;
-//     //     }
-//     }
-
-//     return false;
-// }
