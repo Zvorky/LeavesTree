@@ -156,7 +156,7 @@ struct Node{
             key = key >> 1;
         }
         
-        nav->deleva;
+        nav->deleva();
         return true;
     }
 
@@ -218,7 +218,7 @@ struct Node{
         }
         
         Node<key_type, data_type, secondary_type> node = nav;
-        nav->deleva;
+        nav->deleva();
         return node;
     }
 };
